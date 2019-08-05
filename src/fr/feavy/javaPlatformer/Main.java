@@ -47,8 +47,12 @@ public class Main extends JPanel {
 	private Player player;
 	
 	public Main(int fps) throws NumberFormatException, IOException {
+		setBackground(Color.WHITE);
+		
 		this.player = new Player(0, 0);
 		this.camera = new Camera(player, 800, 800);
+		
+		// Création de KeyListener gérant les déplacements du joueur
 		
 		this.keyListener = new KeyListener() {
 			
@@ -95,24 +99,9 @@ public class Main extends JPanel {
 		};
 		
 		entities.add(this.player);
-		setBackground(Color.WHITE);
 		
-		BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/map")));
+		getMapFromFile("/map");
 		
-		this.width = Integer.parseInt(reader.readLine());
-		this.height = Integer.parseInt(reader.readLine());
-		
-		this.map = new int[height][width];
-		
-		String line;
-		
-		for(int i = 0; i < height; i++) {
-			line = reader.readLine();
-			for(int j = 0; j < width; j++) {
-				this.map[i][j] = Integer.parseInt(line.charAt(j)+"");
-			}
-		}
-
 		new Thread(new Runnable() {
 			
 			@Override
@@ -130,22 +119,48 @@ public class Main extends JPanel {
 		}).start();
 	}
 	
+	private void getMapFromFile(String path) throws NumberFormatException, IOException {
+		BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(path)));
+
+		this.width = Integer.parseInt(reader.readLine());
+		this.height = Integer.parseInt(reader.readLine());
+		
+		this.map = new int[height][width];
+		
+		String line;
+		
+		for(int i = 0; i < height; i++) {
+			line = reader.readLine();
+			for(int j = 0; j < width; j++) {
+				this.map[i][j] = Integer.parseInt(line.charAt(j)+"");
+			}
+		}
+
+	}
+	
 	public KeyListener getKeyListener() {
 		return this.keyListener;
 	}
 	
-	@Override
+	public boolean isBlock(float x, float y) {
+		try {
+			return this.map[(int)(y/WIDTH)][(int)(x/WIDTH)] > 0;
+		}catch(Exception e) {
+			return false;
+		}
+	}
+	
+	
+	/**
+	 * Loop d'update
+	 */
 	public void paint(Graphics g) {
 		// TODO Auto-generated method stub
 		super.paint(g);
 		
 		// Updates
 		
-		for(Entity e : entities) {
-			int x = (int)e.getX(), y = (int)e.getY(), width = (int)e.getWidth(), height = (int)e.getHeight();
-			Rectangle hitbox = new Rectangle(x, y, width, height);
-			
-			
+		for(Entity e : entities) {			
 			if(e.getVelocityY() < FORCE) {
 				e.setVelocityY(e.getVelocityY()+0.2f);
 				if(e.getVelocityY() > FORCE)
@@ -227,18 +242,6 @@ public class Main extends JPanel {
 			g.fillRect((int)(camera.getWidth()/2+e.getX()-camera.getX()), (int)(camera.getHeight()/2+e.getY()-camera.getY()), (int)e.getWidth(), (int)e.getHeight());
 		}
 		
-	}
-	
-	public boolean isBlock(float x, float y) {
-		try {
-			return this.map[(int)(y/WIDTH)][(int)(x/WIDTH)] > 0;
-		}catch(Exception e) {
-			return false;
-		}
-	}
-	
-	public boolean isCollision(Rectangle a, Rectangle b) {
-		return !((a.x + a.width < b.x) || (a.y + a.height < b.y) || (a.x > b.x + b.width) || (a.y > b.y + b.height));
 	}
 	
 }
