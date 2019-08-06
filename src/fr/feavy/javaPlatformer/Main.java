@@ -227,27 +227,27 @@ public class Main extends JPanel {
 			
 			for(Entity e2 : entities) {
 				if(e != e2) {
-					Rectangle hitbox = new Rectangle((int)(e.getX()+e.getVelocityX()), (int)(e.getY()+2), (int)e.getWidth(), (int)(e.getHeight()-2));
-					Rectangle hitbox2 = new Rectangle((int)e2.getX(), (int)(e2.getY()+2), (int)e2.getWidth(), (int)(e2.getHeight()-2));
+					Rectangle hitbox = new Rectangle((int)(e.getX()+e.getVelocityX()), (int)(e.getY()+1), (int)e.getWidth(), (int)(e.getHeight()-2));
+					Rectangle hitbox2 = new Rectangle((int)e2.getX(), (int)(e2.getY()+1), (int)e2.getWidth(), (int)(e2.getHeight()-2));
 					
 					if(isCollision(hitbox, hitbox2)) {
 						if(e.getVelocityX() > 0) {	// Vers la droite
-							e.setX(e2.getX()-e.getWidth()-1);
+							e.setX(e2.getX()-e.getWidth());
 						}else if(e.getVelocityX() < 0){	// Vers la gauche
-							e.setX(e2.getX()+e2.getWidth()+1);
+							e.setX(e2.getX()+e2.getWidth());
 						}
 						e.setVelocityX(0);
 					}
 					
-					hitbox = new Rectangle((int)e.getX(), (int)(e.getY()+e.getVelocityY()), (int)e.getWidth(), (int)e.getHeight());
-					hitbox2 = new Rectangle((int)e2.getX(), (int)e2.getY(), (int)e2.getWidth(), (int)e2.getHeight());
+					hitbox = new Rectangle((int)(e.getX()+1), (int)(e.getY()+e.getVelocityY()), (int)(e.getWidth()-2), (int)(e.getHeight()));
+					hitbox2 = new Rectangle((int)(e2.getX()+1), (int)(e2.getY()), (int)(e2.getWidth()-2), (int)(e2.getHeight()));
 					
 					if(isCollision(hitbox, hitbox2)) {
 						if(e.getVelocityY() > 0) {	// Vers le bas
-							e.setY(e2.getY()-e.getHeight()-1);
+							e.setY(e2.getY()-e.getHeight());
 							e.canJump();
 						}else if(e.getVelocityY() < 0){	// Vers le haut
-							e.setY(e2.getY()+e2.getHeight()+1);
+							e.setY(e2.getY()+e2.getHeight());
 							e2.canJump();
 						}
 						e.setVelocityY(0);
