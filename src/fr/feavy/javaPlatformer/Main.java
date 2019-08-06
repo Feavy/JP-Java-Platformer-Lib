@@ -103,6 +103,7 @@ public class Main extends JPanel {
 		
 		entities.add(this.player);
 		
+		for(int i = 0; i < 3; i++)
 		entities.add(new Entity(256, 100, 28, 32) {
 			
 			private int count = 0;
@@ -118,7 +119,7 @@ public class Main extends JPanel {
 			public void update() {
 				super.update();
 				count++;
-				if(count >= 60) {
+				if(count >= 10) {
 					count = 0;
 					int r = rand.nextInt(2);
 					int r2 = rand.nextInt(2);
@@ -132,6 +133,7 @@ public class Main extends JPanel {
 				}
 			}
 		});
+		
 		
 		getMapFromFile("/map");
 		

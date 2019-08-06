@@ -65,7 +65,6 @@ public abstract class Entity extends GameDrawable implements Collidable{
 	public void jump() {
 		if(canJump) {
 			this.velocityY = -6.5f;
-			isJumping = true;
 			canJump = false;
 		}
 	}
