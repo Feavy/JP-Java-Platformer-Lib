@@ -2,7 +2,9 @@ package fr.feavy.javaPlatformer;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.BufferedReader;
@@ -167,9 +169,11 @@ public class Main extends JPanel {
 	/**
 	 * Loop d'update
 	 */
-	public void paint(Graphics g) {
+	public void paint(Graphics g1) {
 		// TODO Auto-generated method stub
-		super.paint(g);
+		super.paint(g1);
+		
+		Graphics2D g = (Graphics2D)g1;
 		
 		// Updates
 		
@@ -262,8 +266,11 @@ public class Main extends JPanel {
 		
 		this.camera.update();
 		
+		// dessins
+		
 		// Dessin de la map
 		
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g.setColor(new Color(0x2196f3));
 		
 		int startY = (int)(camera.getY()-camera.getHeight()/2)/WIDTH, endY= (int)(camera.getY()+camera.getHeight()/2)/WIDTH;
@@ -273,7 +280,20 @@ public class Main extends JPanel {
 			for(int j = startX; j < endX+1; j++) {
 				try {
 					if(this.map[i][j] > 0) {
-						g.fillRect((int)(camera.getWidth()/2+j*WIDTH-camera.getX()), (int)(camera.getHeight()/2+i*WIDTH-camera.getY()), WIDTH, WIDTH);
+						g.fillRoundRect((int)(camera.getWidth()/2+j*WIDTH-camera.getX()), (int)(camera.getHeight()/2+i*WIDTH-camera.getY()), WIDTH, WIDTH, 20, 20);
+						if(i-1 >= 0 &&this.map[i-1][j] > 0) {
+							g.fillRect((int)(camera.getWidth()/2+j*WIDTH-camera.getX()), (int)(camera.getHeight()/2+i*WIDTH-camera.getY()), WIDTH, 20);
+						}
+						if(i+1 < height && this.map[i+1][j] > 0) {
+							g.fillRect((int)(camera.getWidth()/2+j*WIDTH-camera.getX()), (int)(camera.getHeight()/2+i*WIDTH-camera.getY()+WIDTH-20), WIDTH, 20);
+						}
+						if(j-1 >= 0 && this.map[i][j-1] > 0) {
+							g.fillRect((int)(camera.getWidth()/2+j*WIDTH-camera.getX()), (int)(camera.getHeight()/2+i*WIDTH-camera.getY()), 20, WIDTH);
+						}
+						if(j+1 < width && this.map[i][j+1] > 0) {
+							g.fillRect((int)(camera.getWidth()/2+j*WIDTH-camera.getX()+WIDTH-20), (int)(camera.getHeight()/2+i*WIDTH-camera.getY()), 20, WIDTH);
+						}
+						//g.fillRect((int)(camera.getWidth()/2+j*WIDTH-camera.getX()), (int)(camera.getHeight()/2+i*WIDTH-camera.getY()), WIDTH, WIDTH);
 					}
 				}catch(Exception e) {
 					
@@ -286,7 +306,7 @@ public class Main extends JPanel {
 		g.setColor(new Color(0x673ab7));
 				
 		for(Entity e : entities) {
-			g.fillRect((int)(camera.getWidth()/2+e.getX()-camera.getX()), (int)(camera.getHeight()/2+e.getY()-camera.getY()), (int)e.getWidth(), (int)e.getHeight());
+			g.fillRoundRect((int)(camera.getWidth()/2+e.getX()-camera.getX()), (int)(camera.getHeight()/2+e.getY()-camera.getY()), (int)e.getWidth(), (int)e.getHeight(), 20, 20);
 		}
 		
 	}
