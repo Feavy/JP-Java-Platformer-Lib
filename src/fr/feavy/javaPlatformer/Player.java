@@ -3,7 +3,7 @@ package fr.feavy.javaPlatformer;
 public class Player extends Entity{
 
 	public Player(float x, float y) {
-		super(0, 0, 32, 32);
+		super(0, 0, 28, 32);
 	}
 
 	@Override

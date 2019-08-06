@@ -1,5 +1,7 @@
 package fr.feavy.javaPlatformer;
 
+import java.awt.Rectangle;
+
 public abstract class Entity extends GameDrawable implements Collidable{
 
 	private final float SPEED = 4f;
@@ -15,6 +17,10 @@ public abstract class Entity extends GameDrawable implements Collidable{
 		super(x, y, width, height);
 	}
 
+	public Rectangle getHitbox() {
+		return new Rectangle((int)getX(), (int)getY(), (int)getWidth(), (int)getHeight());
+	}
+	
 	public float getVelocityX() {
 		return velocityX;
 	}
@@ -75,7 +81,13 @@ public abstract class Entity extends GameDrawable implements Collidable{
 		if(isMoving && Math.abs(velocityX) < SPEED) {
 			velocityX += (direction == Direction.LEFT) ? -0.1f : 0.1f;
 		}else if(!isMoving && velocityX != 0) {
-			velocityX = 0;
+			if(Math.abs(velocityX) < .3f)
+				velocityX = 0;
+			else if(velocityX > 0) {
+				velocityX -= 0.2f;
+			}else {
+				velocityX += 0.2f;
+			}
 		}
 		
 	}

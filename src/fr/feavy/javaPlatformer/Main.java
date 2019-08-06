@@ -99,8 +99,18 @@ public class Main extends JPanel {
 		};
 		
 		entities.add(this.player);
+		entities.add(new Entity(64, 100, 28, 32) {
+			
+			@Override
+			public void onCollision(Collidable other) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		
 		getMapFromFile("/map");
+		
+		this.player.setY((this.height-2)*32);
 		
 		new Thread(new Runnable() {
 			
@@ -150,6 +160,9 @@ public class Main extends JPanel {
 		}
 	}
 	
+	public boolean isCollision(Rectangle a, Rectangle b) {
+		return !((a.x + a.width < b.x) || (a.y + a.height < b.y) || (a.x > b.x + b.width) || (a.y > b.y + b.height));
+	}
 	
 	/**
 	 * Loop d'update
@@ -160,7 +173,10 @@ public class Main extends JPanel {
 		
 		// Updates
 		
-		for(Entity e : entities) {			
+		for(Entity e : entities) {		
+			
+			// Gravité
+			
 			if(e.getVelocityY() < FORCE) {
 				e.setVelocityY(e.getVelocityY()+0.2f);
 				if(e.getVelocityY() > FORCE)
@@ -168,7 +184,7 @@ public class Main extends JPanel {
 			}
 						
 			
-			// Test des collisions
+			// Test des collisions avec la map
 			
 			// Vers la gauche
 			
@@ -184,7 +200,7 @@ public class Main extends JPanel {
 			if(isBlock(e.getX()+e.getWidth()+e.getVelocityX(), e.getY()) ||
 					isBlock(e.getX()+e.getWidth()+e.getVelocityX(), e.getY()+e.getHeight()-1)) {
 				int newX = (int)(e.getX()+e.getWidth()+e.getVelocityX())/WIDTH-1;
-				e.setX(newX*WIDTH-1);
+				e.setX(newX*WIDTH+3);
 				e.setVelocityX(0);
 			}
 						
@@ -207,6 +223,37 @@ public class Main extends JPanel {
 				e.setVelocityY(0);
 			}
 			
+			// Collisions avec autres entités
+			
+			for(Entity e2 : entities) {
+				if(e != e2) {
+					Rectangle hitbox = new Rectangle((int)(e.getX()+e.getVelocityX()), (int)(e.getY()+2), (int)e.getWidth(), (int)(e.getHeight()-2));
+					Rectangle hitbox2 = new Rectangle((int)e2.getX(), (int)(e2.getY()+2), (int)e2.getWidth(), (int)(e2.getHeight()-2));
+					
+					if(isCollision(hitbox, hitbox2)) {
+						if(e.getVelocityX() > 0) {	// Vers la droite
+							e.setX(e2.getX()-e.getWidth()-1);
+						}else if(e.getVelocityX() < 0){	// Vers la gauche
+							e.setX(e2.getX()+e2.getWidth()+1);
+						}
+						e.setVelocityX(0);
+					}
+					
+					hitbox = new Rectangle((int)e.getX(), (int)(e.getY()+e.getVelocityY()), (int)e.getWidth(), (int)e.getHeight());
+					hitbox2 = new Rectangle((int)e2.getX(), (int)e2.getY(), (int)e2.getWidth(), (int)e2.getHeight());
+					
+					if(isCollision(hitbox, hitbox2)) {
+						if(e.getVelocityY() > 0) {	// Vers le bas
+							e.setY(e2.getY()-e.getHeight()-1);
+							e.canJump();
+						}else if(e.getVelocityY() < 0){	// Vers le haut
+							e.setY(e2.getY()+e2.getHeight()+1);
+							e2.canJump();
+						}
+						e.setVelocityY(0);
+					}
+				}
+			}
 			
 			e.update();
 		}
