@@ -247,14 +247,16 @@ public class Main extends JPanel {
 					hitbox2 = new Rectangle((int)(e2.getX()+1), (int)(e2.getY()), (int)(e2.getWidth()-2), (int)(e2.getHeight()));
 					
 					if(isCollision(hitbox, hitbox2)) {
-						if(e.getVelocityY() > 0) {	// Vers le bas
+						// Verification e2.y > e.y pour éviter les fausses détection lors de la chute après collision
+						if(e.getVelocityY() > 0 && e2.getY() > e.getY()) {	// Vers le bas
 							e.setY(e2.getY()-e.getHeight());
 							e.canJump();
+							e.setVelocityY(0);
 						}else if(e.getVelocityY() < 0){	// Vers le haut
 							e.setY(e2.getY()+e2.getHeight());
 							e2.canJump();
+							e.setVelocityY(0);
 						}
-						e.setVelocityY(0);
 					}
 				}
 			}
