@@ -14,6 +14,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -101,12 +102,34 @@ public class Main extends JPanel {
 		};
 		
 		entities.add(this.player);
-		entities.add(new Entity(64, 100, 28, 32) {
+		
+		entities.add(new Entity(256, 100, 28, 32) {
+			
+			private int count = 0;
+			private Random rand = new Random();
 			
 			@Override
 			public void onCollision(Collidable other) {
 				// TODO Auto-generated method stub
 				
+			}
+			
+			@Override
+			public void update() {
+				super.update();
+				count++;
+				if(count >= 60) {
+					count = 0;
+					int r = rand.nextInt(2);
+					int r2 = rand.nextInt(2);
+					if(r2 == 0)
+						jump();
+					if(r == 0) {
+						startMoving(Direction.LEFT);
+					}else {
+						startMoving(Direction.RIGHT);
+					}
+				}
 			}
 		});
 		
@@ -235,12 +258,13 @@ public class Main extends JPanel {
 					Rectangle hitbox2 = new Rectangle((int)e2.getX(), (int)(e2.getY()+1), (int)e2.getWidth(), (int)(e2.getHeight()-2));
 					
 					if(isCollision(hitbox, hitbox2)) {
-						if(e.getVelocityX() > 0) {	// Vers la droite
+						if(e.getVelocityX() > 0 && e.getX() < e2.getX()) {	// Vers la droite
 							e.setX(e2.getX()-e.getWidth());
-						}else if(e.getVelocityX() < 0){	// Vers la gauche
+							e.setVelocityX(0);
+						}else if(e.getVelocityX() < 0 && e.getX() > e2.getX()){	// Vers la gauche
 							e.setX(e2.getX()+e2.getWidth());
+							e.setVelocityX(0);
 						}
-						e.setVelocityX(0);
 					}
 					
 					hitbox = new Rectangle((int)(e.getX()+1), (int)(e.getY()+e.getVelocityY()), (int)(e.getWidth()-2), (int)(e.getHeight()));
