@@ -1,10 +1,12 @@
-package fr.feavy.javaPlatformer;
+package fr.feavy.javaPlatformer.system;
 
-public abstract class GameDrawable{
+import java.awt.*;
+
+public abstract class GameObject {
 
 	private float x, y, width, height;
 	
-	public GameDrawable(float x, float y, float width, float height) {
+	public GameObject(float x, float y, float width, float height) {
 		this.x = x;
 		this.y = y;
 		this.width = width;
@@ -36,5 +38,4 @@ public abstract class GameDrawable{
 	}
 	
 	public abstract void update();
-	
 }

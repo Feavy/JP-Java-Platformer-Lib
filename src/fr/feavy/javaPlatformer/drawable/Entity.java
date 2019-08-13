@@ -1,8 +1,12 @@
-package fr.feavy.javaPlatformer;
+package fr.feavy.javaPlatformer.drawable;
+
+import fr.feavy.javaPlatformer.system.GameObject;
+import fr.feavy.javaPlatformer.utils.Direction;
+import fr.feavy.javaPlatformer.utils.Side;
 
 import java.awt.Rectangle;
 
-public abstract class Entity extends GameDrawable {
+public abstract class Entity extends GameObject implements Drawable {
 
 	private final float SPEED = 4f;
 	private boolean isMoving = false;
@@ -107,7 +111,6 @@ public abstract class Entity extends GameDrawable {
 				velocityX += 0.2f;
 			}
 		}
-		
 	}
 
 }
