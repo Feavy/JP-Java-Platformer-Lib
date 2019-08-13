@@ -2,11 +2,13 @@ package fr.feavy.javaPlatformer;
 
 import java.awt.Rectangle;
 
-public abstract class Entity extends GameDrawable implements Collidable{
+public abstract class Entity extends GameDrawable {
 
 	private final float SPEED = 4f;
 	private boolean isMoving = false;
 	private Direction direction;
+
+	private boolean isFrozen = false;
 	
 	private float velocityX = 0, velocityY = 0;
 	
@@ -68,9 +70,26 @@ public abstract class Entity extends GameDrawable implements Collidable{
 			canJump = false;
 		}
 	}
-	
+
+	public abstract  void onCollision(Entity other, Side side);
+
+	public void freeze() {
+		this.isFrozen = true;
+	}
+
+	public void unFreeze() {
+		this.isFrozen = false;
+	}
+
+	public boolean isFrozen() {
+		return isFrozen;
+	}
+
 	@Override
 	public void update() {
+		if(isFrozen)
+			return;
+
 		this.setX(this.getX()+velocityX);
 		this.setY(this.getY()+velocityY);
 		

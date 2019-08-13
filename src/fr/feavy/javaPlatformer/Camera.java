@@ -1,6 +1,6 @@
 package fr.feavy.javaPlatformer;
 
-public class Camera extends GameDrawable{
+public class Camera extends GameDrawable {
 
 	private Player player;
 	
