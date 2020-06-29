@@ -52,7 +52,7 @@ Tile[] tiles = new Tile[]{new SimpleTile(new Color(0x2196f3)), new SimpleTile(ne
     public void onCollision(Entity e, Side side) {  
         if (side == Side.TOP && !e.isFrozen()) {  
             e.freeze();  
-			System.err.println("Vous êtes gelé !");  
+	    System.err.println("Vous êtes gelé !");  
         }  
     }  
 }}
@@ -61,7 +61,7 @@ Ce tableau attribue les index à leurs tuiles.
 #### Création de la map :
 ```java
 Map map = Map.fromFile("/map",	// Le fichier contenant les données de la map
-					   tiles	// Les tuiles à utiliser
+			tiles	// Les tuiles à utiliser
 		  );
 
 ```
